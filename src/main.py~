@@ -1,0 +1,14 @@
+import Main_GUI
+
+if __name__ == '__main__':
+	title = "Test"
+	# style colors
+	global backColor
+	global frontColor
+	backColor="red"
+	frontColor="white"
+
+	gui = Main_GUI.GUI("KataBowling")
+	gui.trackChanges()
+	gui.root.mainloop()
+
