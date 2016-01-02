@@ -1,12 +1,12 @@
 import Tkinter
 from Tkinter import *
 
-# this class is used to create a 
+# this class is used to create a customed double entry widget for frames and to controll the possibles score are input by the user
 class FrameInput(Tkinter.Frame):
 	def __init__(self, master, frameNum):
 
 		# style colors
-		self.backColor="red"
+		self.backColor="#00d8b6"#"red"
 		self.frontColor="white"
 		self.fontSize=14
 		self.fontType="Helvetica"
@@ -17,63 +17,69 @@ class FrameInput(Tkinter.Frame):
 		self.title.set("Frame"+str(frameNum))
 		self.frameTitle = Label(self,textvariable=self.title, bg=self.backColor, fg=self.frontColor,font=(self.fontType, self.fontSize))
 		if frameNum>10:
-			self.title.set("Bonus Frame")
+			self.title.set("Bonus Rolls")
 		self.frameTitle.pack(side=TOP)
 		self.scoreEntry1 = StringVar()
 		self.scoreEntry2 = StringVar()
-		self.scoreEntry1.set('X')
-		self.scoreEntry2.set('X')
+		self.scoreEntry1.set("-")
+		self.scoreEntry2.set("-")
 		# create the first entry box
-		self.Entry1 = Entry(self, textvariable=self.scoreEntry1, bd =0, width=10,font=(self.fontType, self.fontSize))
-		self.Entry1.pack(side = LEFT)
+		self.Entry1 = Entry(self, textvariable=self.scoreEntry1, bd =0, width=7,font=(self.fontType, self.fontSize),justify='center')
+		self.Entry1.pack(side = LEFT,padx=4)
 		# create the second entry box
-		self.Entry2 = Entry(self, textvariable=self.scoreEntry2, bd =0, width=10,font=(self.fontType, self.fontSize))
-		self.Entry2.pack(side = LEFT)
+		self.Entry2 = Entry(self, textvariable=self.scoreEntry2, bd =0, width=7,font=(self.fontType, self.fontSize),justify='center')
+		self.Entry2.pack(side = LEFT,padx=4)
 		# add an argument for frame number
 		self.frameNumber = frameNum
 		
-	def testValidFrame(self, Val1, Val2):
-		if Val1.isdigit() and Val2=="X":
+	def testValidFrame(self, Val1, Val2, isBonus):
+		if not(isBonus) and Val1.isdigit() and Val2.isdigit() and (int(Val1)+int(Val2))>10:
+			self.reset()
+			return False
+		if isBonus and Val1.isdigit() and Val2.isdigit() and (int(Val1)+int(Val2))>20:
+			self.reset()
+			return False
+		elif (not(Val1.isdigit()) and Val1!="-") or (not(Val2.isdigit()) and Val2!="-"):
+			self.reset()
+			return False
+		elif (Val1.isdigit() and int(Val1)>10) or (Val2.isdigit() and int(Val2)>10): 
+			self.reset()
+			return False 
+		else:
 			return True
-		elif (Val1.isdigit() and Val2.isdigit() and (int(Val1)+int(Val2))<11):
+
+
+	def blockBonusRoll2(self):
+		self.scoreEntry2.set("-")
+		
+	def reset(self):
+		self.scoreEntry1.set("-")
+		self.scoreEntry2.set("-")
+
+	def isStrike(self):
+		if self.scoreEntry1.get()=="10":
 			return True
 		else:
 			return False
-		
-	def blockEntry2ifStrikeEntry1(self):
-			self.scoreEntry1.set("10")
-			self.scoreEntry2.set("X")
-	
-	def redisplayEntry1IfEntry2Strike():
-			self.scoreEntry1.set("10")
-			self.scoreEntry2.set("X")
-		
-	def reset(self):
-		self.scoreEntry1.set("X")
-		self.scoreEntry2.set("X")			
-			
-	def store(self,a,b,c):
-		val1 = self.Entry1.get()
-		val2 = self.Entry2.get()
-		if self.testValidFrame(val1, val2):
-			self.scoreEntry1.set(val1)
-			self.scoreEntry2.set(val2)
-		elif val1 == "10":
-			self.blockEntry2ifStrikeEntry1()
-		elif val2 == "10":
-			self.redisplayEntry1IfEntry2Strike()
-		elif val1!="" and val2!="":
-			self.reset()
+
+	def isSpare(self):
+		if self.scoreEntry1.get().isdigit() and  self.scoreEntry2.get().isdigit() and int(self.scoreEntry1.get())+int(self.scoreEntry2.get())==10:
+			return True
+		elif  self.scoreEntry2.get()=="10":
+			return True
+		else:
+			return False
 
 	def get(self,val):
 		tab = [self.scoreEntry1.get(), self.scoreEntry2.get()]
 		if tab[0]==10.0 and val==1:
 			return "0"
-		if tab[0]=="X" and val==0:
+		if tab[0]=="-" and val==0:
 			return "0"
-		if tab[1]=="X" and val==1:
+		if tab[1]=="-" and val==1:
 			return "0"
-					
+		if tab[val]=='':
+			return "0"					
 		return tab[val]
 
 
