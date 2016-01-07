@@ -55,7 +55,7 @@ class GUI():
 		# create image
 		self.currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 		self.parentdir = os.path.dirname(self.currentdir)
-		self.imgName = self.parentdir+"/img/bowling2_"+self.frontColor+".png"
+		self.imgName = self.parentdir+"/img/bowling2_"+self.frontColor+".gif"
 		self.imgCan = Canvas(self.root, width=int(614/2), height=int(460/2), bg=self.backColor)
 		self.picture = PhotoImage(file=self.imgName)
 		self.imgCan.create_image(152,115,image=self.picture)
